@@ -2476,6 +2476,8 @@ void PM_Jump (void)
 
 	qboolean cansuperjump = false;
 
+	qboolean ljed = false;
+
 	if (pmove->dead)
 	{
 		pmove->oldbuttons |= IN_JUMP ;	// don't jump again until released
@@ -2555,7 +2557,7 @@ void PM_Jump (void)
 	// In the air now.
     pmove->onground = -1;
 
-	PM_PreventMegaBunnyJumping();
+	//PM_PreventMegaBunnyJumping();
 
 	if ( tfc )
 	{
@@ -2588,6 +2590,7 @@ void PM_Jump (void)
 			}
 		
 			pmove->velocity[2] = sqrt(2 * 800 * 56.0);
+			ljed = 1;
 		}
 		else
 		{
@@ -2597,6 +2600,31 @@ void PM_Jump (void)
 	else
 	{
 		pmove->velocity[2] = sqrt(2 * 800 * 45.0);
+	}
+
+	// YaLTeR: ABH.
+	if (!ljed)
+	{
+		float hSpeed, speedBoostPerc, speedAddition, maxSpeed, newSpeed;
+		vec3_t fwd;
+		AngleVectors(pmove->angles, fwd, NULL, NULL);
+		fwd[2] = 0;
+		VectorNormalize(fwd);
+		hSpeed = sqrt(pmove->velocity[0]*pmove->velocity[0] + pmove->velocity[1]*pmove->velocity[1]);
+
+		speedBoostPerc = (!(pmove->flags & FL_DUCKING)) ? 0.5f : 0.1f;
+		speedAddition = fabs(pmove->cmd.forwardmove * speedBoostPerc);
+		maxSpeed = pmove->maxspeed + (pmove->maxspeed * speedBoostPerc);
+		newSpeed = (speedAddition + hSpeed);
+
+		if (newSpeed > maxSpeed)
+			speedAddition -= newSpeed - maxSpeed;
+
+		if (pmove->cmd.forwardmove < 0.0f)
+			speedAddition *= -1.0f;
+
+		VectorScale(fwd, speedAddition, fwd);
+		VectorAdd(fwd, pmove->velocity, pmove->velocity);
 	}
 
 	// Decay it for simulation

@@ -2448,7 +2448,7 @@ void PM_PreventMegaBunnyJumping( void )
 	// Speed at which bunny jumping is limited
 	float maxscaledspeed;
 
-	maxscaledspeed = BUNNYJUMP_MAX_SPEED_FACTOR * pmove->maxspeed;
+	maxscaledspeed = pmove->maxspeed;
 
 	// Don't divide by zero
 	if ( maxscaledspeed <= 0.0f )
@@ -2459,7 +2459,7 @@ void PM_PreventMegaBunnyJumping( void )
 	if ( spd <= maxscaledspeed )
 		return;
 
-	fraction = ( maxscaledspeed / spd ) * 0.65; //Returns the modifier for the velocity
+	fraction = ( maxscaledspeed / spd ); //Returns the modifier for the velocity
 	
 	VectorScale( pmove->velocity, fraction, pmove->velocity ); //Crop it down!.
 }

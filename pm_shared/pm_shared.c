@@ -1021,7 +1021,10 @@ void PM_Accelerate (vec3_t wishdir, float wishspeed, float accel)
 		accelspeed = addspeed;
 
 	float speed = hypot(pmove->velocity[0], pmove->velocity[1]);
-	float max_resulting_speed = max(speed, pmove->maxspeed);
+	float maxspeed = pmove->maxspeed;
+	if (pmove->flags & FL_DUCKING)
+		maxspeed *= PLAYER_DUCKING_MULTIPLIER;
+	float max_resulting_speed = max(speed, maxspeed);
 	
 	// Adjust velocity.
 	for (i=0 ; i<3 ; i++)
@@ -1320,7 +1323,10 @@ void PM_AirAccelerate (vec3_t wishdir, float wishspeed, float accel)
 		accelspeed = addspeed;
 
 	float speed = hypot(pmove->velocity[0], pmove->velocity[1]);
-	float max_resulting_speed = max(speed, pmove->maxspeed);
+	float maxspeed = pmove->maxspeed;
+	if (pmove->flags & FL_DUCKING)
+		maxspeed *= PLAYER_DUCKING_MULTIPLIER;
+	float max_resulting_speed = max(speed, maxspeed);
 	
 	// Adjust pmove vel.
 	for (i=0 ; i<3 ; i++)
@@ -2480,6 +2486,8 @@ void PM_PreventMegaBunnyJumping( void )
 	float maxscaledspeed;
 
 	maxscaledspeed = pmove->maxspeed;
+	if (pmove->flags & FL_DUCKING)
+		maxscaledspeed *= PLAYER_DUCKING_MULTIPLIER;
 
 	// Don't divide by zero
 	if ( maxscaledspeed <= 0.0f )

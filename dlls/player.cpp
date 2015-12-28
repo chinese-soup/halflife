@@ -2562,6 +2562,7 @@ void CBasePlayer :: UpdatePlayerSound ( void )
 	//ALERT ( at_console, "%d/%d\n", iVolume, m_iTargetVolume );
 }
 
+extern "C" int bTouchedGround[32]; // Oh no a magic number.
 
 void CBasePlayer::PostThink()
 {
@@ -2594,7 +2595,13 @@ void CBasePlayer::PostThink()
 // of maximum safe distance will make no sound. Falling farther than max safe distance will play a 
 // fallpain sound, and damage will be inflicted based on how far the player fell
 
-	if ( (FBitSet(pev->flags, FL_ONGROUND)) && (pev->health > 0) && m_flFallVelocity >= PLAYER_FALL_PUNCH_THRESHHOLD )
+	bool ground = false;
+	if (entindex() > 0 && entindex() <= 32)
+		ground = bTouchedGround[entindex() - 1];
+	else
+		ground = FBitSet(pev->flags, FL_ONGROUND);
+
+	if ( ground && (pev->health > 0) && m_flFallVelocity >= PLAYER_FALL_PUNCH_THRESHHOLD )
 	{
 		// ALERT ( at_console, "%f\n", m_flFallVelocity );
 
@@ -2630,7 +2637,7 @@ void CBasePlayer::PostThink()
 		}
     }
 
-	if (FBitSet(pev->flags, FL_ONGROUND))
+	if (ground)
 	{		
 		if (m_flFallVelocity > 64 && !g_pGameRules->IsMultiplayer())
 		{

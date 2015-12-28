@@ -134,6 +134,11 @@ typedef struct hull_s
 
 #define MAX_CLIENTS 32
 
+#ifdef CLIENT_DLL
+static
+#endif
+int bTouchedGround[MAX_CLIENTS];
+
 #define	CONTENTS_CURRENT_0		-9
 #define	CONTENTS_CURRENT_90		-10
 #define	CONTENTS_CURRENT_180	-11
@@ -868,6 +873,8 @@ int PM_FlyMove (void)
 		if (trace.plane.normal[2] > 0.7)
 		{
 			blocked |= 1;		// floor
+
+			bTouchedGround[pmove->player_index] = 1;
 		}
 		// If the plane has a zero z component in the normal, then it's a 
 		//  step or wall
@@ -1604,6 +1611,8 @@ void PM_CatagorizePosition (void)
 			// If we could make the move, drop us down that 1 pixel
 			if (pmove->waterlevel < 2 && !tr.startsolid && !tr.allsolid)
 				VectorCopy (tr.endpos, pmove->origin);
+
+			bTouchedGround[pmove->player_index] = 1;
 		}
 
 		// Standing on an entity other than the world
@@ -2700,7 +2709,7 @@ void PM_CheckWaterJump (void)
 
 void PM_CheckFalling( void )
 {
-	if ( pmove->onground != -1 &&
+	if ( bTouchedGround[pmove->player_index] &&
 		 !pmove->dead &&
 		 pmove->flFallVelocity >= PLAYER_FALL_PUNCH_THRESHHOLD )
 	{
@@ -2963,6 +2972,8 @@ were contacted during the move.
 void PM_PlayerMove ( qboolean server )
 {
 	physent_t *pLadder = NULL;
+
+	bTouchedGround[pmove->player_index] = 0;
 
 	// Are we running server code?
 	pmove->server = server;                

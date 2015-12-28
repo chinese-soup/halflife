@@ -1,3 +1,14 @@
+Half-Life no fun allowed edition
+======================
+- Changed the bhop cap.
+- Fixed air acceleration.
+- Fixed ground acceleration.
+- Fixed jumpbug, edgebug, duckbug.
+- Fixed damage boosting.
+- Fixed ducktapping.
+- Fixed object boosting.
+- Fixed brute launching.
+
 Half Life 1 SDK LICENSE
 ======================
 

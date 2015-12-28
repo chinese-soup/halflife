@@ -890,7 +890,8 @@ int CBaseMonster :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker,
 	}
 
 	// if this is a player, move him around!
-	if ( ( !FNullEnt( pevInflictor ) ) && (pev->movetype == MOVETYPE_WALK) && (!pevAttacker || pevAttacker->solid != SOLID_TRIGGER) )
+	// actually don't, speedrunners use it for their cheating
+	if ( !IsPlayer() && ( !FNullEnt( pevInflictor ) ) && (pev->movetype == MOVETYPE_WALK) && (!pevAttacker || pevAttacker->solid != SOLID_TRIGGER) )
 	{
 		pev->velocity = pev->velocity + vecDir * -DamageForce( flDamage );
 	}

@@ -1300,11 +1300,22 @@ void PM_AirAccelerate (vec3_t wishdir, float wishspeed, float accel)
 	// Cap it
 	if (accelspeed > addspeed)
 		accelspeed = addspeed;
+
+	float speed = hypot(pmove->velocity[0], pmove->velocity[1]);
+	float max_resulting_speed = max(speed, pmove->maxspeed);
 	
 	// Adjust pmove vel.
 	for (i=0 ; i<3 ; i++)
 	{
 		pmove->velocity[i] += accelspeed*wishdir[i];	
+	}
+
+	float new_speed = hypot(pmove->velocity[0], pmove->velocity[1]);
+	if (new_speed > max_resulting_speed)
+	{
+		float scale = max_resulting_speed / new_speed;
+		pmove->velocity[0] *= scale;
+		pmove->velocity[1] *= scale;
 	}
 }
 

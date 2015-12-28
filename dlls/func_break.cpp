@@ -960,15 +960,13 @@ void CPushable :: Move( CBaseEntity *pOther, int push )
 	pev->velocity.y += pevToucher->velocity.y * factor;
 
 	float length = sqrt( pev->velocity.x * pev->velocity.x + pev->velocity.y * pev->velocity.y );
-	if ( push && (length > MaxSpeed()) )
+	if ( (length > MaxSpeed()) )
 	{
 		pev->velocity.x = (pev->velocity.x * MaxSpeed() / length );
 		pev->velocity.y = (pev->velocity.y * MaxSpeed() / length );
 	}
 	if ( playerTouch )
 	{
-		pevToucher->velocity.x = pev->velocity.x;
-		pevToucher->velocity.y = pev->velocity.y;
 		if ( (gpGlobals->time - m_soundTime) > 0.7 )
 		{
 			m_soundTime = gpGlobals->time;

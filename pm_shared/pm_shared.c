@@ -2996,6 +2996,7 @@ void PM_PlayerMove ( qboolean server )
 	{
 		if ( PM_CheckStuck() )
 		{
+			VectorCopy(vec3_origin, pmove->velocity);
 			return;  // Can't move, we're stuck
 		}
 	}

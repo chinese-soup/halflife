@@ -2595,7 +2595,7 @@ void CBasePlayer::PostThink()
 // of maximum safe distance will make no sound. Falling farther than max safe distance will play a 
 // fallpain sound, and damage will be inflicted based on how far the player fell
 
-	bool ground = false;
+	bool ground;
 	if (entindex() > 0 && entindex() <= 32)
 		ground = bTouchedGround[entindex() - 1];
 	else

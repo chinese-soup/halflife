@@ -34,6 +34,11 @@
 
 #include "archtypes.h"     // DAL
 
+// Misc C-runtime library headers
+#include "stdio.h"
+#include "stdlib.h"
+#include "math.h"
+
 // Prevent tons of unused windows definitions
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -62,11 +67,6 @@ typedef int BOOL;
 #define _vsnprintf(a,b,c,d) vsnprintf(a,b,c,d)
 #endif
 #endif //_WIN32
-
-// Misc C-runtime library headers
-#include "stdio.h"
-#include "stdlib.h"
-#include "math.h"
 
 // Header file containing definition of globalvars_t and entvars_t
 typedef unsigned int func_t;					//

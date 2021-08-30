@@ -753,6 +753,7 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 #endif
 
+	float m_flStartCharge;
 	void Spawn( void );
 	void Precache( void );
 	int iItemSlot( void ) { return 4; }

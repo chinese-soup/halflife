@@ -209,7 +209,7 @@ void CGauss::SecondaryAttack()
 		SendWeaponAnim( GAUSS_SPINUP );
 		m_fInAttack = 1;
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5;
-		m_pPlayer->m_flStartCharge = gpGlobals->time;
+		m_flStartCharge = gpGlobals->time;
 		m_pPlayer->m_flAmmoStartCharge = UTIL_WeaponTimeBase() + GetFullChargeTime();
 
 		PLAYBACK_EVENT_FULL( FEV_NOTHOST, m_pPlayer->edict(), m_usGaussSpin, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, 110, 0, 0, 0 );
@@ -261,8 +261,8 @@ void CGauss::SecondaryAttack()
 			m_pPlayer->m_flNextAmmoBurn = 1000;
 		}
 
-		int pitch = ( gpGlobals->time - m_pPlayer->m_flStartCharge ) * ( 150 / GetFullChargeTime() ) + 100;
-		if ( pitch > 250 ) 
+		int pitch = ( gpGlobals->time - m_flStartCharge ) * ( 150 / GetFullChargeTime() ) + 100;
+		if ( pitch > 250 )
 			 pitch = 250;
 		
 		// ALERT( at_console, "%d %d %d\n", m_fInAttack, m_iSoundState, pitch );
@@ -277,7 +277,7 @@ void CGauss::SecondaryAttack()
 		m_pPlayer->m_iWeaponVolume = GAUSS_PRIMARY_CHARGE_VOLUME;
 		
 		// m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.1;
-		if ( m_pPlayer->m_flStartCharge < gpGlobals->time - 10 )
+		if ( m_flStartCharge < gpGlobals->time - 10 )
 		{
 			// Player charged up too long. Zap him.
 			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, 80 + RANDOM_LONG(0,0x3f));
@@ -313,13 +313,13 @@ void CGauss::StartFire( void )
 	Vector vecAiming = gpGlobals->v_forward;
 	Vector vecSrc = m_pPlayer->GetGunPosition( ); // + gpGlobals->v_up * -8 + gpGlobals->v_right * 8;
 	
-	if ( gpGlobals->time - m_pPlayer->m_flStartCharge > GetFullChargeTime() )
+	if ( gpGlobals->time - m_flStartCharge > GetFullChargeTime() )
 	{
 		flDamage = 200;
 	}
 	else
 	{
-		flDamage = 200 * (( gpGlobals->time - m_pPlayer->m_flStartCharge) / GetFullChargeTime() );
+		flDamage = 200 * (( gpGlobals->time - m_flStartCharge) / GetFullChargeTime() );
 	}
 
 	if ( m_fPrimaryFire )

@@ -2579,8 +2579,9 @@ int CGraph :: FSetGraphPointers ( void )
 			memcpy( name, m_pLinkPool[ i ].m_szLinkEntModelname, 4 );
 			name[4] = 0;
 			pentLinkEnt =  FIND_ENTITY_BY_STRING( NULL, "model", name );
-
-			if ( FNullEnt ( pentLinkEnt ) )
+			ALERT ( at_aiconsole, "**Could not find model %s\n", name );
+			m_pLinkPool[ i ].m_pLinkEnt = NULL;
+			/*if ( FNullEnt ( pentLinkEnt ) )
 			{
 			// the ent isn't around anymore? Either there is a major problem, or it was removed from the world
 			// ( like a func_breakable that's been destroyed or something ). Make sure that LinkEnt is null.
@@ -2595,7 +2596,7 @@ int CGraph :: FSetGraphPointers ( void )
 				{
 					m_pLinkPool[ i ].m_pLinkEnt->flags += FL_GRAPHED;
 				}
-			}
+			}*/
 		}
 	}
 

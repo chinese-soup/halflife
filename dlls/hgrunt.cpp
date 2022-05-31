@@ -146,6 +146,7 @@ public:
 	void PrescheduleThink ( void );
 	void GibMonster( void );
 	void SpeakSentence( void );
+	void Killed( entvars_t *pevAttacker, int iGib );
 
 	int	Save( CSave &save ); 
 	int Restore( CRestore &restore );
@@ -835,6 +836,29 @@ void CHGrunt :: Shotgun ( void )
 	SetBlending( 0, angDir.x );
 }
 
+void CHGrunt :: Killed( entvars_t *pevAttacker, int iGib )
+{
+	CSquadMonster :: Killed ( pevAttacker, iGib );
+	Vector	vecGunPos;
+	Vector	vecGunAngles;
+
+	GetAttachment( 0, vecGunPos, vecGunAngles );
+
+	// now spawn a gun.
+	if (FBitSet( pev->weapons, HGRUNT_SHOTGUN ))
+	{
+		DropItem( "weapon_shotgun", vecGunPos, vecGunAngles );
+	}
+	else
+	{
+		DropItem( "weapon_9mmAR", vecGunPos, vecGunAngles );
+	}
+	if (FBitSet( pev->weapons, HGRUNT_GRENADELAUNCHER ))
+	{
+		DropItem( "ammo_ARgrenades", BodyTarget( pev->origin ), vecGunAngles );
+	}
+}
+
 //=========================================================
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
@@ -855,20 +879,6 @@ void CHGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 
 			// switch to body group with no gun.
 			SetBodygroup( GUN_GROUP, GUN_NONE );
-
-			// now spawn a gun.
-			if (FBitSet( pev->weapons, HGRUNT_SHOTGUN ))
-			{
-				 DropItem( "weapon_shotgun", vecGunPos, vecGunAngles );
-			}
-			else
-			{
-				 DropItem( "weapon_9mmAR", vecGunPos, vecGunAngles );
-			}
-			if (FBitSet( pev->weapons, HGRUNT_GRENADELAUNCHER ))
-			{
-				DropItem( "ammo_ARgrenades", BodyTarget( pev->origin ), vecGunAngles );
-			}
 
 			}
 			break;

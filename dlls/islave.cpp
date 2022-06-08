@@ -59,6 +59,7 @@ public:
 	void PainSound( void );
 	void AlertSound( void );
 	void IdleSound( void );
+	void MonsterThink( void );
 
 	void Killed( entvars_t *pevAttacker, int iGib );
 
@@ -86,6 +87,9 @@ public:
 
 	int	m_voicePitch;
 
+	int m_currentFrame;
+	bool restored = false;
+
 	EHANDLE m_hDead;
 
 	static const char *pAttackHitSounds[];
@@ -108,10 +112,20 @@ TYPEDESCRIPTION	CISlave::m_SaveData[] =
 	DEFINE_FIELD( CISlave, m_voicePitch, FIELD_INTEGER ),
 
 	DEFINE_FIELD( CISlave, m_hDead, FIELD_EHANDLE ),
+	DEFINE_FIELD( CISlave, m_currentFrame, FIELD_INTEGER ),
 
 };
 
-IMPLEMENT_SAVERESTORE( CISlave, CSquadMonster );
+int CISlave::Save(CSave &save) {
+	m_currentFrame = pev->frame;
+	if (!CSquadMonster::Save(save)) return 0;
+	return save.WriteFields("CISlave", this, m_SaveData, (sizeof(m_SaveData) / sizeof(m_SaveData[0])));
+}
+int CISlave::Restore(CRestore &restore) {
+	if (!CSquadMonster::Restore(restore)) return 0;
+	restored = true;
+	return restore.ReadFields("CISlave", this, m_SaveData, (sizeof(m_SaveData) / sizeof(m_SaveData[0])));
+}
 
 
 
@@ -150,6 +164,15 @@ int	CISlave :: Classify ( void )
 	return	CLASS_ALIEN_MILITARY;
 }
 
+void CISlave :: MonsterThink( void )
+{
+	CBaseMonster::MonsterThink( );
+	if (restored)
+	{
+		pev->frame = m_currentFrame;
+		restored = false;
+	}
+}
 
 int CISlave::IRelationship( CBaseEntity *pTarget )
 {

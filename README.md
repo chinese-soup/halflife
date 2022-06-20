@@ -9,6 +9,18 @@ Half-Life no fun allowed edition
 - Fixed object boosting.
 - Fixed brute launching.
 
+New:
+
+- Fixed quickgauss.
+- Fixed IHD.
+- Fixed NPCs opening doors.
+- Fixed crash on hornet change level.
+- Fixed pressing buttons through walls.
+- Fixed fastfire.
+- Fixed vortigaunts' charge being reset by saveloading.
+- Fixed duplicating weapons by saveloading.
+- Fixed NPCs rotating slower when game is running at higher FPS.
+
 Half Life 1 SDK LICENSE
 ======================
 

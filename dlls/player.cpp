@@ -1556,31 +1556,6 @@ void CBasePlayer::PlayerUse ( void )
 			// if it's "hull" is in the view cone
 			vecLOS = UTIL_ClampVectorToBox( vecLOS, pObject->pev->size * 0.5 );
 
-			TraceResult tr;
-			TraceResult tr2;
-
-			Vector vecSrc = EyePosition();
-			Vector vecEnd = VecBModelOrigin( pObject->pev );
-			UTIL_TraceLine( vecSrc, vecEnd, dont_ignore_monsters, ENT(pev), &tr ); // ENT(pev) is the player here
-
-			if ( tr.pHit && !FStrEq(STRING(tr.pHit->v.classname), STRING(pObject->pev->classname)))
-			{
-				// ALERT( at_console, "[TRACE1] %s : %s | %f\n", STRING(tr.pHit->v.classname), STRING(pObject->pev->classname), tr.flFraction);
-				// ALERT( at_console, "[TRACE2] %s : %s | %f\n", STRING(tr2.pHit->v.classname), STRING(pObject->pev->classname), tr2.flFraction);
-
-				// Some buttons are really small and it'd be inefficient to trace to them several times,
-				// so let's just try to trace from the crosshair aim and see if it matches up with the classname
-				// from the previous trace.
-				// If it does we are hitting a button that we are directly looking at
-				// and it is too small to be picked up by the first trace.
-				// This is stupid, but I can't think of a better way than this, that at the same time again doesn't
-				// let you press buttons through the walls in certain cases/angles.
-				UTIL_TraceLine ( pev->origin + pev->view_ofs, pev->origin + pev->view_ofs + gpGlobals->v_forward * 128, dont_ignore_monsters, ENT(pev), &tr2);
-
-				if (tr2.pHit && !FStrEq(STRING(tr2.pHit->v.classname), STRING(pObject->pev->classname)))
-					continue;
-			}
-
 			flDot = DotProduct (vecLOS , gpGlobals->v_forward);
 			if (flDot > flMaxDot )
 			{// only if the item is in front of the user
@@ -1596,6 +1571,20 @@ void CBasePlayer::PlayerUse ( void )
 	// Found an object
 	if (pObject )
 	{
+		TraceResult tr;
+
+		Vector vecSrc = EyePosition();
+		Vector vecEnd = VecBModelOrigin( pObject->pev );
+
+		UTIL_TraceLine( vecEnd, vecSrc, dont_ignore_monsters, ENT(pObject->pev), &tr ); // ENT(pev) is the player here
+		// ALERT( at_console, "[TRACE2] Hit: %s : OG Object: %s | %f | SOLID=%d \n", STRING(tr2.pHit->v.classname), STRING(pObject->pev->classname), tr2.flFraction, tr2.fAllSolid);
+
+		if ( tr.pHit && !FStrEq(STRING(tr.pHit->v.classname), "player") )
+		{
+			// ALERT(at_console, "this isn't ok.\n");
+			return;
+		}
+
 		int caps = pObject->ObjectCaps();
 
 		if ( m_afButtonPressed & IN_USE )

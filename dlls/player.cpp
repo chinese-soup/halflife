@@ -1577,10 +1577,15 @@ void CBasePlayer::PlayerUse ( void )
 		Vector vecEnd = VecBModelOrigin( pObject->pev );
 
 		UTIL_TraceLine( vecEnd, vecSrc, dont_ignore_monsters, ENT(pObject->pev), &tr ); // ENT(pObject->pev) is the close object here
-		// ALERT( at_console, "[TRACE] Hit: %s : OG Object: %s | %f | SOLID=%d \n", STRING(tr.pHit->v.classname), STRING(pObject->pev->classname), tr.flFraction, tr.fAllSolid);
 
-		if ( tr.pHit && !FStrEq(STRING(tr.pHit->v.classname), "player") )
-			// ALERT(at_console, "this isn't ok.\n");
+		// ALERT( at_console, "[TRACE] Hit: %s : OG Object: %s | %f | Target=%s \n", STRING(tr.pHit->v.classname), STRING(pObject->pev->classname), tr.flFraction, STRING(pObject->pev->target));
+
+		// I'm sorry I just can't be bothered anymore
+		// The exception that proves the rule...
+		bool cond = tr.pHit && !FStrEq(STRING(tr.pHit->v.classname), "player");
+
+		if (cond && !FStrEq(STRING(pObject->pev->target), "c1a4bdoor3"))
+			//ALERT(at_console, "[TRACE1] This isn't ok.");
 			return;
 
 		int caps = pObject->ObjectCaps();

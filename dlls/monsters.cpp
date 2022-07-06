@@ -108,8 +108,6 @@ TYPEDESCRIPTION	CBaseMonster::m_SaveData[] =
 
 	DEFINE_FIELD( CBaseMonster, m_scriptState, FIELD_INTEGER ),
 	DEFINE_FIELD( CBaseMonster, m_pCine, FIELD_CLASSPTR ),
-
-	DEFINE_FIELD( CBaseMonster, m_flLastYawTime, FIELD_FLOAT ),
 };
 
 //IMPLEMENT_SAVERESTORE( CBaseMonster, CBaseToggle );
@@ -2540,18 +2538,16 @@ float CBaseMonster::ChangeYaw ( int yawSpeed )
 	if (current != ideal)
 	{
 		if( m_flLastYawTime == 0 )
-		{
 			m_flLastYawTime = gpGlobals->time - gpGlobals->frametime;
-		}
 
 		float delta = gpGlobals->time - m_flLastYawTime;
 
 		m_flLastYawTime = gpGlobals->time;
 
-		if( delta > 0.25 )
+		if (delta > 0.25)
 			delta = 0.25;
 
-		speed = yawSpeed * delta * 2;
+		speed = (float)yawSpeed * delta * 2;
 
 		move = ideal - current;
 

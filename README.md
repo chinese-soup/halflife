@@ -20,6 +20,7 @@ New:
 - Fixed vortigaunts' charge being reset by saveloading.
 - Fixed duplicating weapons by saveloading.
 - Fixed NPCs rotating slower when game is running at higher FPS.
+- Fixed explosions going through walls in certain cases.
 
 Half Life 1 SDK LICENSE
 ======================

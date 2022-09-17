@@ -838,25 +838,28 @@ void CHGrunt :: Shotgun ( void )
 
 void CHGrunt :: Killed( entvars_t *pevAttacker, int iGib )
 {
-	CSquadMonster :: Killed ( pevAttacker, iGib );
 	Vector	vecGunPos;
 	Vector	vecGunAngles;
 
 	GetAttachment( 0, vecGunPos, vecGunAngles );
 
-	// now spawn a gun.
-	if (FBitSet( pev->weapons, HGRUNT_SHOTGUN ))
+	if (!ShouldGibMonster(iGib)) // If we're gibbing, we 'throw' a gun in Gibbed(), not here.
 	{
-		DropItem( "weapon_shotgun", vecGunPos, vecGunAngles );
+		// now spawn a gun.
+		if (FBitSet( pev->weapons, HGRUNT_SHOTGUN ))
+		{
+			DropItem( "weapon_shotgun", vecGunPos, vecGunAngles );
+		}
+		else
+		{
+			DropItem( "weapon_9mmAR", vecGunPos, vecGunAngles );
+		}
+		if (FBitSet( pev->weapons, HGRUNT_GRENADELAUNCHER ))
+		{
+			DropItem( "ammo_ARgrenades", BodyTarget( pev->origin ), vecGunAngles );
+		}
 	}
-	else
-	{
-		DropItem( "weapon_9mmAR", vecGunPos, vecGunAngles );
-	}
-	if (FBitSet( pev->weapons, HGRUNT_GRENADELAUNCHER ))
-	{
-		DropItem( "ammo_ARgrenades", BodyTarget( pev->origin ), vecGunAngles );
-	}
+	CSquadMonster :: Killed ( pevAttacker, iGib );
 }
 
 //=========================================================

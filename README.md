@@ -21,6 +21,7 @@ New:
 - Fixed duplicating weapons by saveloading.
 - Fixed NPCs rotating slower when game is running at higher FPS.
 - Fixed explosions going through walls in certain cases.
+- Fixed ladderboosting.
 
 Half Life 1 SDK LICENSE
 ======================

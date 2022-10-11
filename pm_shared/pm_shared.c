@@ -2163,6 +2163,13 @@ void PM_LadderMove( physent_t *pLadder )
 			right += flSpeed;
 		}
 
+		float speed = hypot(right, forward);
+		if (speed > MAX_CLIMB_SPEED)
+		{
+			right *= 0.5f;
+			forward *= 0.5f;
+		}
+
 		if ( pmove->cmd.buttons & IN_JUMP )
 		{
 			pmove->movetype = MOVETYPE_WALK;

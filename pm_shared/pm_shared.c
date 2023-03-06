@@ -2215,8 +2215,8 @@ void PM_LadderMove( physent_t *pLadder )
 				//pev->velocity = lateral - (CrossProduct( trace.vecPlaneNormal, perp ) * normal);
 
 				// Ladderspeeding fix: just cap the z-component of the velocity
-				if (abs(pmove->velocity[2]) > MAX_CLIMB_SPEED)
-						pmove->velocity[2] *= MAX_CLIMB_SPEED / abs(pmove->velocity[2]);
+				if (fabs(pmove->velocity[2]) > MAX_CLIMB_SPEED)
+						pmove->velocity[2] *= MAX_CLIMB_SPEED / fabs(pmove->velocity[2]);
 			}
 			else
 			{

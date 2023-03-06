@@ -2163,13 +2163,6 @@ void PM_LadderMove( physent_t *pLadder )
 			right += flSpeed;
 		}
 
-		float speed = hypot(right, forward);
-		if (speed > MAX_CLIMB_SPEED)
-		{
-			right *= 0.5f;
-			forward *= 0.5f;
-		}
-
 		if ( pmove->cmd.buttons & IN_JUMP )
 		{
 			pmove->movetype = MOVETYPE_WALK;
@@ -2220,6 +2213,10 @@ void PM_LadderMove( physent_t *pLadder )
 					VectorMA( pmove->velocity, MAX_CLIMB_SPEED, trace.plane.normal, pmove->velocity );
 				}
 				//pev->velocity = lateral - (CrossProduct( trace.vecPlaneNormal, perp ) * normal);
+
+				// Ladderspeeding fix: just cap the z-component of the velocity
+				if (abs(pmove->velocity[2]) > MAX_CLIMB_SPEED)
+						pmove->velocity[2] *= MAX_CLIMB_SPEED / abs(pmove->velocity[2]);
 			}
 			else
 			{
